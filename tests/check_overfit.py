@@ -1,6 +1,6 @@
 import sys; sys.path.insert(0, ".")
 import torch
-from src.data.nyu import read_pairs, split_by_scene, NYUDepth
+from src.data.dataset import read_pairs, split_by_scene, NYUDepth
 from src.models.unet import UNet
 from src.metrics.depth import depth_metrics
 

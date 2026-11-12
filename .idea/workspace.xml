@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fccad2b-c2fb-4085-a274-c737bf37540c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/models/unet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/check_model_shape.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/check_overfit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="9fccad2b-c2fb-4085-a274-c737bf37540c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
