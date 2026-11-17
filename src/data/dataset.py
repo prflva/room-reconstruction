@@ -62,3 +62,25 @@ class NYUDepth(Dataset):
         return (torch.from_numpy(np.ascontiguousarray(rgb)).permute(2, 0, 1),   # (3,H,W)
                 torch.from_numpy(np.ascontiguousarray(depth))[None],            # (1,H,W) метры
                 torch.from_numpy(np.ascontiguousarray(mask))[None])             # (1,H,W) bool
+
+class NYUCached(Dataset):
+    """Читает готовые массивы, созданные build_cache.py."""
+    def __init__(self, cache_dir, split, augment=False):
+        self.rgb = np.load(f"{cache_dir}/{split}_rgb.npy", mmap_mode="r")
+        self.dep = np.load(f"{cache_dir}/{split}_depth.npy", mmap_mode="r")
+        self.augment = augment
+
+    def __len__(self):
+        return len(self.rgb)
+
+    def __getitem__(self, i):
+        rgb = self.rgb[i].astype(np.float32) / 255.0
+        depth = self.dep[i].astype(np.float32) / 1000.0        # мм -> метры
+        if self.augment:
+            if random.random() < 0.5:
+                rgb, depth = rgb[:, ::-1], depth[:, ::-1]
+            rgb = np.clip((rgb - 0.5) * random.uniform(0.8, 1.2) + 0.5 + random.uniform(-0.1, 0.1), 0, 1)
+        mask = (depth > 0.01) & (depth < 10.0)
+        return (torch.from_numpy(np.ascontiguousarray(rgb)).permute(2, 0, 1),
+                torch.from_numpy(np.ascontiguousarray(depth))[None],
+                torch.from_numpy(np.ascontiguousarray(mask))[None])

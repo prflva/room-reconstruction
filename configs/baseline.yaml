@@ -1,5 +1,6 @@
 name: baseline
 data_root: /kaggle/input/datasets/soumikrakshit/nyu-depth-v2/nyu_data/
+cache_dir: /kaggle/working/cache
 size: [240, 320]
 batch_size: 16
 epochs: 20

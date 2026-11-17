@@ -7,7 +7,7 @@ import torch
 import yaml
 from torch.utils.data import DataLoader
 
-from src.data.dataset import read_pairs, split_by_scene, NYUDepth
+from src.data.dataset import read_pairs, split_by_scene, NYUDepth, NYUCached
 from src.metrics.depth import depth_metrics
 from src.models.unet import UNet
 
@@ -22,13 +22,11 @@ def main(cfg_path):
     device = "cuda"
 
     # --- данные: train для обучения, val для контроля (test пока не трогаем)
-    root = cfg["data_root"]
-    train_pairs, val_pairs = split_by_scene(read_pairs(root, root + "data/nyu2_train.csv"))
-    size = tuple(cfg["size"])
-    train_dl = DataLoader(NYUDepth(train_pairs, size, augment=True), batch_size=cfg["batch_size"],
-                          shuffle=True, num_workers=cfg["num_workers"], drop_last=True)
-    val_dl = DataLoader(NYUDepth(val_pairs, size, augment=False), batch_size=cfg["batch_size"],
-                        shuffle=False, num_workers=cfg["num_workers"])
+    cache = cfg["cache_dir"]
+    train_dl = DataLoader(NYUCached(cache, "train", augment=True), batch_size=cfg["batch_size"],
+                          shuffle=True, num_workers=cfg["num_workers"], drop_last=True, pin_memory=True)
+    val_dl = DataLoader(NYUCached(cache, "val"), batch_size=cfg["batch_size"],
+                        shuffle=False, num_workers=cfg["num_workers"], pin_memory=True)
 
     model = UNet().to(device)
     opt = torch.optim.Adam(model.parameters(), lr=cfg["lr"])
