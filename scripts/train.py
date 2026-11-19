@@ -42,8 +42,9 @@ def main(cfg_path):
         run = 0.0
         for rgb, gt, mask in train_dl:
             rgb = rgb.to(device, non_blocking=True).to(memory_format=torch.channels_last)
-            gt, mask = (rgb.to(device, non_blocking=True), gt.to(device, non_blocking=True),
-                             mask.to(device, non_blocking=True))
+            gt = gt.to(device, non_blocking=True)
+            mask = mask.to(device, non_blocking=True)
+
             with torch.autocast("cuda", dtype=torch.float16):
                 raw = model(rgb)
             pred = torch.exp(raw.float().clamp(max=3.0))
